@@ -48,21 +48,64 @@ On most campuses the Wi-Fi password is shared, nobody knows which device belongs
 ## Architecture
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#16162a','primaryTextColor':'#f0f0ff','primaryBorderColor':'#4f46e5','lineColor':'#0ea5e9','secondaryColor':'#0d0d1a','tertiaryColor':'#12121f','clusterBkg':'#0d0d1a','clusterBorder':'#4f46e5','titleColor':'#0ea5e9','edgeLabelBackground':'#16162a'}}}%%
+%%{init: {'theme':'base','themeVariables':{'fontSize':'15px','primaryColor':'#16162a','primaryTextColor':'#f0f0ff','primaryBorderColor':'#4f46e5','lineColor':'#0ea5e9','clusterBkg':'#0d0d1a','clusterBorder':'#4f46e5','titleColor':'#0ea5e9','edgeLabelBackground':'#16162a'}}}%%
 flowchart LR
-  UI["Vue 3 control room"] -->|REST| API["Django REST API"]
-  API --> DB[("Database")]
-  API -->|RouterOS API| GW["MikroTik gateway<br/>dual-WAN · exam mode"]
-  API --> RAD["FreeRADIUS"]
-  RAD --> AP["UniFi access points"]
-  GW --> DEV["Student and staff devices"]
+  UI["🖥️ Vue 3 control room"]:::staff
+  API{{"⚙️ Django REST API"}}:::core
+  DB[("🗄️ Database")]:::data
+  AE["🏫 AEMMS<br/>people and rooms"]:::ai
+  GW["🧭 MikroTik gateway<br/>dual-WAN · exam mode"]:::net
+  RAD["🔐 FreeRADIUS"]:::net
+  AP["📶 UniFi access points"]:::net
+  DEV["🎓 Student and staff devices"]:::trainee
+  UI -->|REST| API
+  API <--> DB
+  AE -.->|Wi-Fi identities| API
+  API ==>|RouterOS API| GW
+  API --> RAD
+  RAD --> AP
+  GW --> DEV
   AP --> DEV
+  classDef ai fill:#9333ea,stroke:#d8b4fe,stroke-width:2px,color:#ffffff
+  classDef core fill:#ea580c,stroke:#fdba74,stroke-width:3px,color:#ffffff
+  classDef data fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff
+  classDef net fill:#0d9488,stroke:#5eead4,stroke-width:2px,color:#ffffff
+  classDef staff fill:#4f46e5,stroke:#a5b4fc,stroke-width:2px,color:#ffffff
+  classDef trainee fill:#0284c7,stroke:#7dd3fc,stroke-width:2px,color:#ffffff
+  linkStyle default stroke:#0ea5e9,stroke-width:2px
 ```
 
 <p align="center">
   <img src="assets/campus-server-stack.png" width="80%" alt="Campus server stack on Proxmox"/>
   <br/><sub>Production deployment: dual-WAN uplinks and campus services on one Proxmox host</sub>
 </p>
+
+### Exam mode, step by step
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'fontSize':'15px','actorBkg':'#4f46e5','actorBorder':'#a5b4fc','actorTextColor':'#ffffff','actorLineColor':'#6b6b8a','signalColor':'#0ea5e9','signalTextColor':'#0ea5e9','labelBoxBkgColor':'#f97316','labelBoxBorderColor':'#fdba74','labelTextColor':'#ffffff','loopTextColor':'#f97316','noteBkgColor':'#16162a','noteTextColor':'#f0f0ff','noteBorderColor':'#f97316','activationBkgColor':'#0ea5e9','activationBorderColor':'#7dd3fc','sequenceNumberColor':'#ffffff'}}}%%
+sequenceDiagram
+  autonumber
+  participant IT as 🧑‍💻 IT officer
+  participant NM as 🛡️ NetworkMate
+  participant GW as 🧭 MikroTik gateway
+  participant ST as 🎓 Student devices
+  participant SF as 🧑‍💼 Staff devices
+  rect rgba(234, 88, 12, 0.16)
+    Note over IT,GW: Exam starts
+    IT->>NM: Turn exam mode on
+    NM->>GW: Enable exam firewall rules (RouterOS API)
+    NM->>GW: Allow each student's primary device only
+    GW-->>ST: Internet blocked, exam hosts allowed
+    GW-->>SF: No change, staff stay online
+  end
+  rect rgba(5, 150, 105, 0.16)
+    Note over IT,GW: Exam ends
+    IT->>NM: Turn exam mode off
+    NM->>GW: Disable exam firewall rules
+    GW-->>ST: Normal access restored
+  end
+```
 
 ## Engineering highlights
 
