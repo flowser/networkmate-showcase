@@ -1,4 +1,7 @@
-<h1 align="center">NetworkMate — Campus Network Control Room</h1>
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="assets/theme/hero-light.svg"/>
+  <img width="100%" src="assets/theme/hero-dark.svg" alt="NetworkMate. Campus network control room."/>
+</picture>
 
 <p align="center">
   A web control room for school and campus networks: identity Wi-Fi, device control, and one-click exam lockdown on MikroTik and FreeRADIUS.<br/>
@@ -6,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-In_production-22c55e?style=flat-square" alt="In production"/>
+  <img src="https://img.shields.io/badge/Status-In_production-34d399?style=flat-square&labelColor=16162a" alt="In production"/>
   <img src="https://img.shields.io/badge/Django_REST-092E20?style=flat-square&logo=django&logoColor=white" alt="Django"/>
   <img src="https://img.shields.io/badge/Vue_3-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white" alt="Vue 3"/>
   <img src="https://img.shields.io/badge/MikroTik-293239?style=flat-square&logo=mikrotik&logoColor=white" alt="MikroTik"/>
@@ -18,7 +21,7 @@
 
 > **This is a showcase repository.** The source code is private and in production use. A live walkthrough is available on request — [get in touch](#contact).
 
----
+<p align="center"><img width="100%" src="assets/theme/divider.svg" alt=""/></p>
 
 ## The problem
 
@@ -40,11 +43,12 @@ On most campuses the Wi-Fi password is shared, nobody knows which device belongs
   <br/><sub>Student and staff lanes through one campus gateway</sub>
 </p>
 
----
+<p align="center"><img width="100%" src="assets/theme/divider.svg" alt=""/></p>
 
 ## Architecture
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#16162a','primaryTextColor':'#f0f0ff','primaryBorderColor':'#4f46e5','lineColor':'#0ea5e9','secondaryColor':'#0d0d1a','tertiaryColor':'#12121f','clusterBkg':'#0d0d1a','clusterBorder':'#4f46e5','titleColor':'#0ea5e9','edgeLabelBackground':'#16162a'}}}%%
 flowchart LR
   UI["Vue 3 control room"] -->|REST| API["Django REST API"]
   API --> DB[("Database")]
@@ -81,7 +85,7 @@ flowchart LR
 
 Deployed at a teacher-training college in Kenya as part of a full campus build: dual-WAN (Starlink + Airtel), identity Wi-Fi at roster scale, exam lockdown, and self-hosted services. Read the [campus network case study](https://github.com/flowser/flowser/blob/main/case-studies/chesta-campus-network.md).
 
----
+<p align="center"><img width="100%" src="assets/theme/divider.svg" alt=""/></p>
 
 ## Contact
 
